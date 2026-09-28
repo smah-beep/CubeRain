@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Renderer))]
 public class Cube : MonoBehaviour
 {
     private Renderer _renderer;
@@ -21,7 +22,7 @@ public class Cube : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.GetComponent<Platform>() != null && TryRelease())
+        if (collision.gameObject.TryGetComponent<Platform>(out Platform platform) && TryRelease())
         {
             SetRandomColor();
             StartCoroutine(DieAfterDelay());
@@ -35,7 +36,10 @@ public class Cube : MonoBehaviour
 
     private bool TryRelease()
     {
-        if (_isReleased) return false;
+        if (_isReleased) 
+        {
+            return false;
+        }
 
         else
         {

@@ -27,15 +27,25 @@ public class Spawner : MonoBehaviour
 
     private void Start()
     {
-        float timeFirstCall = 0;
-        float timeRepeatRate = 0.5f;
-        InvokeRepeating(nameof(GetCube), timeFirstCall, timeRepeatRate);
+        StartCoroutine(SpawnWithDelay());
     }
 
-    public Cube GetCube()
+    private Cube GetCube()
     {
         Cube cube = _cubePool.Get();
         return cube;
+    }
+
+    private IEnumerator SpawnWithDelay()
+    {
+        bool corutineWork = true;
+
+        while (corutineWork)
+        {
+            float timeRepeatRate = 0.5f;
+            yield return new WaitForSeconds(timeRepeatRate);
+            GetCube();
+        }        
     }
 
     public void DestroyCube(Cube cube)
